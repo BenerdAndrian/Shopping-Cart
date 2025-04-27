@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 const useFetchAPI=()=>{
     const [dataList,setDataList]=useState({})
     const [error,setError]=useState(false);
@@ -22,11 +23,34 @@ const useFetchAPI=()=>{
     return {dataList,error,loading}
 }
 
+const useFetchFixedAPI=(id)=>{
+    const [data,setData]=useState({})
+    const [error,setError]=useState(false);
+    const [loading,setLoading]=useState(true)
+    useEffect(()=>{
+        fetch(`https://dummyjson.com/products/${id}`)
+        .then((response)=>{
+            if(!response.ok){
+                throw new Error(`The server is Error: ${response.status}`)
+            }
+            return response.json()
+        })
+        .then((data)=>{
+            setData(data)
+        })
+        .catch((err)=>{
+            setError(err)
+        })
+        .finally(()=>{setLoading(false)})
+    },[])
+    return {data,error,loading}
+}
 
 function ProductPage(){
     const {dataList,error,loading}=useFetchAPI();
     const [productName,setProductName]=useState('');
     const [filteredArray,setFilteredArray]=useState([])
+    const navigate=useNavigate()
     const findProduct=(e)=>{
       setProductName(e.target.value)
     };
@@ -34,7 +58,9 @@ function ProductPage(){
     useEffect(()=>{
         if(dataList.products){
             const filterArray=dataList.products.filter((item)=>{
-            return item.title.toLowerCase().includes(productName.toLowerCase())
+            return (item.title.toLowerCase().includes(productName.toLowerCase())
+                   ||
+                   item.category.toLowerCase().includes(productName.toLowerCase()))
         })
         setFilteredArray(filterArray)
     
@@ -60,7 +86,7 @@ function ProductPage(){
                     <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
                     <button className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
-                    <button className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
+                    <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
                     </div>
                   
                 </li>
@@ -75,4 +101,4 @@ function ProductPage(){
        
     )
 }
-export {ProductPage}
+export {ProductPage,useFetchFixedAPI}
