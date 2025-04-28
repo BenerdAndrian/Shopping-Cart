@@ -21,7 +21,7 @@ function DetailProduct(){
      <img className="w-60 h-60" src={currImg===''?data.images[0]:currImg} alt="product's image" />
      <ul className="flex mb-2 gap-x-2 mt-2">
        {data.images.map((image,index)=>(
-        <li onClick={()=>changeImage(index)} className="cursor-pointer">
+        <li onMouseEnter={()=>changeImage(index)} className="cursor-pointer">
             <img className="w-15 h-15 bg-gray-200 pr-2 pb-2" src={image} alt="image" />
         </li>
        ))}
