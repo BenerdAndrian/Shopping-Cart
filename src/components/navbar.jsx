@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom"
+import { Link,useOutletContext } from "react-router-dom"
 function NavbarSection(){
-
     return (
         <>
         <header className='bg-blue-500 text-white flex items-center justify-between p-5'>
@@ -13,8 +12,9 @@ function NavbarSection(){
                     <li>
                         <Link to="products">Products</Link>
                     </li>
-                    <li>
+                    <li classNae="relative">
                         <Link to="cart">Cart</Link>
+                        <p className="absolute bg-red-600 text-white p-1">{amount}</p>
                     </li>
                 </ul>
             </nav>

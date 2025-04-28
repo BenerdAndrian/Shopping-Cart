@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react"
+import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const useFetchAPI=()=>{
     const [dataList,setDataList]=useState({})
@@ -47,14 +48,16 @@ const useFetchFixedAPI=(id)=>{
 }
 
 function ProductPage(){
+    const {addToCart}=useOutletContext();
     const {dataList,error,loading}=useFetchAPI();
     const [productName,setProductName]=useState('');
     const [filteredArray,setFilteredArray]=useState([])
+    const [number,setNumber]=useState(1)
     const navigate=useNavigate()
     const findProduct=(e)=>{
       setProductName(e.target.value)
     };
-
+   
     useEffect(()=>{
         if(dataList.products){
             const filterArray=dataList.products.filter((item)=>{
@@ -84,8 +87,9 @@ function ProductPage(){
                     <h2 className="font-bold text-[1.3rem]">{item.title}</h2>
                     <h3>Price: {item.price}$</h3>
                     <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
+                    <input className="border mt-auto" type="number" defaultValue="1" min="1" onInput={(e)=>setNumber(e.target.value)}/>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
-                    <button className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
+                    <button onClick={()=>addToCart(item,Number(number))} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
                     <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
                     </div>
                   
