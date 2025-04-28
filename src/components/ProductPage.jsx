@@ -2,11 +2,13 @@ import { useState,useEffect } from "react"
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoadingPage } from "./utils";
+import { Notification } from "./utils";
 // create custom hook to fetch dataList with 30 items(limit=30)
 const useFetchAPI=()=>{
     const [dataList,setDataList]=useState({})
     const [error,setError]=useState(false);
     const [loading,setLoading]=useState(true)
+    
     useEffect(()=>{
         fetch('https://dummyjson.com/products?limit=30')
         .then((response)=>{
@@ -50,7 +52,7 @@ const useFetchFixedAPI=(id)=>{
 }
 //ProductPage component
 function ProductPage(){
-
+    const [notify,setNotify]=useState(false)
     const {addToCart}=useOutletContext();
     const {dataList,error,loading}=useFetchAPI();
     const [productName,setProductName]=useState('');
@@ -81,13 +83,17 @@ function ProductPage(){
             [id]:Number(e.target.value),
         }))
     }
-   
+   const toClose=()=>{
+    console.log('hello')
+    setNotify(false)
+   }
    
     if(error) return <p>There are some Errors went on.</p>
     if(loading) return <LoadingPage/>
     //render jsx
     return(
         <>
+           {notify && <Notification role='cart' closeNotification={toClose}/>}
            <h1 className="text-[2rem] font-bold text-center pt-5">This is the product page</h1>
            <div className="p-3">
            <input onChange={findProduct} type="text" placeholder="Search for items" className="text-[1.3rem] p-1 w-full border" />
@@ -104,7 +110,7 @@ function ProductPage(){
                     <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
                     <input className="border mt-auto" type="number" defaultValue="1" min="1" onChange={(e)=>handleInputChange(e,item.id)}/>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
-                <button onClick={()=>addToCart(item,inputValue)} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
+                <button onClick={()=>{addToCart(item,inputValue),setNotify(true)}} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
                     <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
                     </div>
                   

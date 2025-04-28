@@ -1,7 +1,9 @@
 import { useOutletContext,useNavigate } from "react-router-dom"
-
+import { Notification } from "./utils"
+import { useState } from "react"
 function CartPage(){
     const {cart,amount,setCart,setAmount,input}=useOutletContext()
+    const [notify,setNotify]=useState(false)
     console.log('day la inputvalue: ',input)
     const navigate=useNavigate()
     const deleteItem=(index,item)=>{
@@ -11,8 +13,17 @@ function CartPage(){
       setAmount(amount=> amount-Number(input[item.id]||1))
     }
     console.log('cart here: ',cart)
+    const handleCheckOut=()=>{
+      setNotify(true);
+      setCart([])
+      setAmount(0)
+    }
+    const toClose=()=>{
+      setNotify(false)
+    }
     return(
         <>
+          {notify && <Notification role="checkout" closeNotification={toClose}/>}
           <h1 className="text-[2rem] font-bold text-center pt-5">This is the cart page</h1>
           <ul className=" flex flex-col max-w-5/6 mx-auto gap-y-3">
           {cart.map((item,index)=>(
@@ -21,12 +32,14 @@ function CartPage(){
                 <p className="font-bold flex-1">{item.title}</p>
                 <p className="flex-1">{item.price}$</p>
                 <p className="flex-1">{input[item.id]}</p>
-                <p className="flex-1">Total: {(item.price*input[item.id]).toFixed(2)}</p>
+                <p className="flex-1">Total: {(item.price*input[item.id]).toFixed(2)}$</p>
                 <button onClick={()=>deleteItem(index,item)} className="bg-red-600 text-white py-1 px-2 rounded-md cursor-pointer ">Delete</button>
                 <button onClick={()=>navigate(`/products/${item.id}`)} className="bg-green-500 text-white py-1 px-2">More</button>
             </li>
         ))}
           </ul>
+          {cart.length===0 && <p className="text-center mt-6">There is no item here.</p>}
+          {cart.length>0 && <button onClick={handleCheckOut} className="bg-green-500 text-white text-[1.2rem] p-1.5 block mx-auto mt-3 rounded-2xl cursor-pointer">Check Out</button>}
         </>
       
     )
