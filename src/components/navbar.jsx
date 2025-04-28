@@ -1,10 +1,14 @@
 import { Link,useOutletContext } from "react-router-dom"
-function NavbarSection(){
+import PropTypes from "prop-types"
+import storeImg from '../assets/img/store.svg'
+//NavbarSection component with amount passing as props represent total amount
+function NavbarSection({amount}){
+
     return (
         <>
         <header className='bg-blue-500 text-white flex items-center justify-between p-5'>
-            <h2>This is the logo</h2>
-            <nav>
+            <img className='w-10 h-10' src={storeImg} alt="logo" />
+            <nav> 
                 <ul className="flex justify-evenly items-center w-100 text-[1.2rem]">
                     <li>
                        <Link to="/">Home</Link>
@@ -12,14 +16,18 @@ function NavbarSection(){
                     <li>
                         <Link to="products">Products</Link>
                     </li>
-                    <li classNae="relative">
+                    <li className="relative">
                         <Link to="cart">Cart</Link>
-                        <p className="absolute bg-red-600 text-white p-1">{amount}</p>
+                        <p className="absolute bg-red-600 text-white px-2 rounded-full -top-2 -right-6 text-[0.9rem]">{amount}</p>
                     </li>
                 </ul>
             </nav>
         </header>
         </>
     )
+}
+//checking props type
+NavbarSection.propsType={
+amount:PropTypes.number.isRequired,
 }
 export {NavbarSection}

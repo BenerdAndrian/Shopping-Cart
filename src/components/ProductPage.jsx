@@ -1,6 +1,8 @@
 import { useState,useEffect } from "react"
 import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { LoadingPage } from "./utils";
+// create custom hook to fetch dataList with 30 items(limit=30)
 const useFetchAPI=()=>{
     const [dataList,setDataList]=useState({})
     const [error,setError]=useState(false);
@@ -23,7 +25,7 @@ const useFetchAPI=()=>{
     },[])
     return {dataList,error,loading}
 }
-
+// create custom hook to fetch a single item based on the id
 const useFetchFixedAPI=(id)=>{
     const [data,setData]=useState({})
     const [error,setError]=useState(false);
@@ -46,18 +48,19 @@ const useFetchFixedAPI=(id)=>{
     },[])
     return {data,error,loading}
 }
-
+//ProductPage component
 function ProductPage(){
+
     const {addToCart}=useOutletContext();
     const {dataList,error,loading}=useFetchAPI();
     const [productName,setProductName]=useState('');
     const [filteredArray,setFilteredArray]=useState([])
-    const [number,setNumber]=useState(1)
+    const [inputValue,setInputValue]=useState({})
     const navigate=useNavigate()
     const findProduct=(e)=>{
       setProductName(e.target.value)
     };
-   
+   //filter the dataList after finishes fetching and update on useState above
     useEffect(()=>{
         if(dataList.products){
             const filterArray=dataList.products.filter((item)=>{
@@ -71,8 +74,18 @@ function ProductPage(){
       setFilteredArray(filterArray)
     }
     },[dataList,productName])
+    // update the current quantity value before clicking on addToCart btn
+    const handleInputChange=(e,id)=>{
+        setInputValue((prev)=>({
+            ...prev,
+            [id]:Number(e.target.value),
+        }))
+    }
+   
+   
     if(error) return <p>There are some Errors went on.</p>
-    if(loading) return <p>Loading...</p>
+    if(loading) return <LoadingPage/>
+    //render jsx
     return(
         <>
            <h1 className="text-[2rem] font-bold text-center pt-5">This is the product page</h1>
@@ -80,6 +93,8 @@ function ProductPage(){
            <input onChange={findProduct} type="text" placeholder="Search for items" className="text-[1.3rem] p-1 w-full border" />
            <ul className="flex flex-wrap gap-5 justify-center pt-5">
             {
+            //if we dont type in searching box or when the filter array is blank, then in case the filter array have result
+            //we will render the array,if not then render the dataList,otherwise in case we type in but no result, then render "there is no data"
             (productName==='' || filteredArray.length>0)?
             (filteredArray.length>0?filteredArray:dataList.products).map((item)=>(
                 <li className="border rounded-2xl p-4 w-65 flex flex-col">
@@ -87,9 +102,9 @@ function ProductPage(){
                     <h2 className="font-bold text-[1.3rem]">{item.title}</h2>
                     <h3>Price: {item.price}$</h3>
                     <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
-                    <input className="border mt-auto" type="number" defaultValue="1" min="1" onInput={(e)=>setNumber(e.target.value)}/>
+                    <input className="border mt-auto" type="number" defaultValue="1" min="1" onChange={(e)=>handleInputChange(e,item.id)}/>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
-                    <button onClick={()=>addToCart(item,Number(number))} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
+                <button onClick={()=>addToCart(item,inputValue)} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
                     <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
                     </div>
                   

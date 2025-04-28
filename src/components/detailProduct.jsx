@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useFetchFixedAPI } from "./ProductPage";
 import { useState } from "react";
+import { LoadingPage } from "./utils";
 function DetailProduct(){
    const {id}=useParams();
    const {data,error,loading}=useFetchFixedAPI(id)
@@ -8,7 +9,7 @@ function DetailProduct(){
    const [currImg,setImage]=useState('');
    console.log('day la data: ',data)
    if(error) return <p>There is server error.</p>
-   if(loading) return <p>Loading...</p>
+   if(loading) return <LoadingPage/>
    console.log('day la images : ',data.images)
    const changeImage=(index)=>{
      setImage(data.images[index])
