@@ -28,11 +28,11 @@ function DetailProduct(){
     setNote(false)
    }
     return (
-     <>
+     <div className="px-3 py-3">
       {note && <Notification role='cart' closeNotification={toClose}/>}
-    <div className="flex">
-    <div className="border flex flex-col w-1/4 flex-shrink-0 p-3">
-     <img className="w-60 h-60" src={currImg===''?data.images[0]:currImg} alt="product's image" />
+    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col w-100 md:w-1/4 flex-shrink-0">
+     <img className="w-100 h-100 md:w-60 md:h-60" src={currImg===''?data.images[0]:currImg} alt="product's image" />
      <ul className="flex mb-2 gap-x-2 mt-2">
        {data.images.map((image,index)=>(
         <li onMouseEnter={()=>changeImage(index)} className="cursor-pointer">
@@ -41,7 +41,7 @@ function DetailProduct(){
        ))}
      </ul>
      </div>
-     <div className="flex flex-col w-full border pt-8 pl-3">
+     <div className="flex flex-col w-full pb-3 pt-8">
      <h1 className="text-[1.7rem] font-bold">{data.title}</h1>
      <h2 className="font-bold">Price: {data.price}$</h2>
      <p className="italic">Category: {data.category}</p>
@@ -64,8 +64,8 @@ function DetailProduct(){
      </div>
      </div>
     </div>
-    <div className="border p-2">
-        <h2 className="font-bold text-[1.4rem]">Detailed Information</h2>
+    <div className="p-2 bg-gray-200 text-[0.8rem] italic">
+        <h2 className="font-bold text-[1.22rem]">Detailed Information</h2>
         <p>Width:{data.dimensions.width}</p>
         <p>Height: {data.dimensions.height}</p>
         <p>Depth: {data.dimensions.depth}</p>
@@ -73,7 +73,7 @@ function DetailProduct(){
         <p>Shipping Information: {data.shippingInformation}</p>
         <p>Availability Status: {data.availabilityStatus}</p>
      </div>
-     </>
+     </div>
     )
 }
 export {DetailProduct}

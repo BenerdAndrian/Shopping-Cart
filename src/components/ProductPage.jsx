@@ -84,7 +84,9 @@ function ProductPage(){
     console.log('hello')
     setNotify(false)
    }
-   
+   const fixedLength=(text,length)=>{
+    return text.slice(0,length)+'...'
+   }
     if(error) return <p>There are some Errors went on.</p>
     if(loading) return <LoadingPage/>
     //render jsx
@@ -100,11 +102,11 @@ function ProductPage(){
             //we will render the array,if not then render the dataList,otherwise in case we type in but no result, then render "there is no data"
             (productName==='' || filteredArray.length>0)?
             (filteredArray.length>0?filteredArray:dataList.products).map((item)=>(
-                <li className="shadow-lg rounded-2xl p-4 w-65 flex flex-col">
+                <li className="shadow-lg rounded-2xl p-4 w-60 flex flex-col">
                     <img className="w-50 h-50" src={item.thumbnail} alt="product's image" />
                     <h2 className="font-bold text-[1.3rem]">{item.title}</h2>
                     <h3>Price: {item.price}$</h3>
-                    <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
+                    <p className="text-gray-400 text-[0.8rem]">{fixedLength(item.description,100)}</p>
                     <input className="border mt-auto" type="number" defaultValue="1" min="1" onChange={(e)=>handleInputChange(e,item.id)}/>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
                 <button onClick={()=>{addToCart(item,inputValue),setNotify(true)}} className="text-white bg-orange-700 rounded-full py-0.5 px-3 cursor-pointer">Add To Cart</button>
