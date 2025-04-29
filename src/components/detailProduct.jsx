@@ -1,12 +1,15 @@
-import { useParams } from "react-router-dom"
+import { useParams,useOutletContext } from "react-router-dom"
 import { useFetchFixedAPI } from "./ProductPage";
 import { useState } from "react";
 import { LoadingPage } from "./utils";
+import { Notification } from "./utils";
 function DetailProduct(){
    const {id}=useParams();
    const {data,error,loading}=useFetchFixedAPI(id)
    const [number,setNumber]=useState(1)
    const [currImg,setImage]=useState('');
+   const {addFixedItem}=useOutletContext();
+   const [note,setNote]=useState(false);
    console.log('day la data: ',data)
    if(error) return <p>There is server error.</p>
    if(loading) return <LoadingPage/>
@@ -14,8 +17,19 @@ function DetailProduct(){
    const changeImage=(index)=>{
      setImage(data.images[index])
    }
+  const increaseNumber=()=>{
+    setNumber(number=>number+1)
+  }
+  const decreaseNumber=()=>{
+   if(number>1) setNumber(number=>number-1)
+  }
+  const toClose=()=>{
+    console.log('hello')
+    setNote(false)
+   }
     return (
      <>
+      {note && <Notification role='cart' closeNotification={toClose}/>}
     <div className="flex">
     <div className="border flex flex-col w-1/4 flex-shrink-0 p-3">
      <img className="w-60 h-60" src={currImg===''?data.images[0]:currImg} alt="product's image" />
@@ -34,9 +48,9 @@ function DetailProduct(){
      <p className="italic">Brand: {data.brand}</p>
      <p className="text-shadow-gray-300">{data.description}</p>
      <div className="flex gap-x-1">
-        <button onClick={()=>setNumber(number=>number+1)} className="px-2 border cursor-pointer">+</button>
+        <button onClick={()=>increaseNumber()} className="px-2 border cursor-pointer">+</button>
         <p className="px-2 border">{number}</p>
-        <button onClick={()=>{number>1 && setNumber(number=>number-1)}} className="px-2 border cursor-pointer">-</button>
+        <button onClick={()=>{decreaseNumber()}} className="px-2 border cursor-pointer">-</button>
      </div>
      <div className="flex mt-2 items-center">
      <p className="text-orange-700 text-3xl mr-2">Total: {(data.price*number).toFixed(2)}$</p>
@@ -46,11 +60,11 @@ function DetailProduct(){
      
      <div className="mt-2">
      <button className="py-0.5 px-3 bg-green-500 text-white mr-1 cursor-pointer">Buy Now</button>
-     <button className="py-0.5 px-3 bg-red-500 text-white cursor-pointer">Add To Cart</button>
+      <button onClick={()=>{addFixedItem(data,number),setNote(true)}}  className="py-0.5 px-3 bg-red-500 text-white cursor-pointer">Add To Cart</button>
      </div>
      </div>
     </div>
-    <div className="border p-2 rounded-2xl">
+    <div className="border p-2">
         <h2 className="font-bold text-[1.4rem]">Detailed Information</h2>
         <p>Width:{data.dimensions.width}</p>
         <p>Height: {data.dimensions.height}</p>

@@ -9,7 +9,7 @@ function NavbarSection({amount}){
         <header className='bg-blue-500 text-white flex items-center justify-between p-5'>
             <img className='w-10 h-10' src={storeImg} alt="logo" />
             <nav> 
-                <ul className="flex justify-evenly items-center w-100 text-[1.2rem]">
+                <ul className="hidden md:flex justify-evenly items-center w-100 text-[1.2rem]">
                     <li>
                        <Link to="/">Home</Link>
                     </li>

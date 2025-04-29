@@ -66,14 +66,11 @@ function ProductPage(){
     useEffect(()=>{
         if(dataList.products){
             const filterArray=dataList.products.filter((item)=>{
-            return (item.title.toLowerCase().includes(productName.toLowerCase())
+            return ((item.title.toLowerCase().includes(productName.toLowerCase()))
                    ||
-                   item.category.toLowerCase().includes(productName.toLowerCase()))
+                   (item.category.toLowerCase().includes(productName.toLowerCase())))
         })
         setFilteredArray(filterArray)
-    
-      
-      setFilteredArray(filterArray)
     }
     },[dataList,productName])
     // update the current quantity value before clicking on addToCart btn
@@ -103,15 +100,15 @@ function ProductPage(){
             //we will render the array,if not then render the dataList,otherwise in case we type in but no result, then render "there is no data"
             (productName==='' || filteredArray.length>0)?
             (filteredArray.length>0?filteredArray:dataList.products).map((item)=>(
-                <li className="border rounded-2xl p-4 w-65 flex flex-col">
+                <li className="shadow-lg rounded-2xl p-4 w-65 flex flex-col">
                     <img className="w-50 h-50" src={item.thumbnail} alt="product's image" />
                     <h2 className="font-bold text-[1.3rem]">{item.title}</h2>
                     <h3>Price: {item.price}$</h3>
                     <p className="text-gray-400 text-[0.8rem]">{item.description}</p>
                     <input className="border mt-auto" type="number" defaultValue="1" min="1" onChange={(e)=>handleInputChange(e,item.id)}/>
                     <div className="pt-3 mt-auto flex flex-row items-center justify-evenly">
-                <button onClick={()=>{addToCart(item,inputValue),setNotify(true)}} className="text-white bg-orange-700 rounded-full py-0.5 px-1.5 cursor-pointer">Add To Cart</button>
-                    <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-o.5 px-1.5 cursor-pointer">More...</button>
+                <button onClick={()=>{addToCart(item,inputValue),setNotify(true)}} className="text-white bg-orange-700 rounded-full py-0.5 px-3 cursor-pointer">Add To Cart</button>
+                    <button onClick={()=>navigate(`/products/${item.id}`)} className="text-white bg-emerald-500 rounded-full py-1 px-3 cursor-pointer">More</button>
                     </div>
                   
                 </li>
@@ -126,4 +123,4 @@ function ProductPage(){
        
     )
 }
-export {ProductPage,useFetchFixedAPI}
+export {ProductPage,useFetchFixedAPI,useFetchAPI}
