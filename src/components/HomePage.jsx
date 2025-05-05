@@ -6,9 +6,11 @@ import nextIcon from '../assets/img/nextIcon.svg'
 import { useState,useEffect } from 'react'
 import { useFetchAPI } from './ProductPage'
 function HomePage(){
+    const images=[image1,image2,image3]
     return(
     <>
-    <ImageCarousel/>
+    <ImageCarousel images={images}/>
+    <h1 className="text-[2rem] font-bold text-center pt-5">This is the Homepage</h1>
     <ProductSlide/>
     </>
     )
@@ -48,8 +50,8 @@ function ProductSlide(){
         </section> 
     )
 }
-function ImageCarousel(){
-    const images=[image1,image2,image3]
+function ImageCarousel({images}){
+   
     const [currImg,setCurrImg]=useState(0);
     const handlePrevImg=()=>{
         if(currImg>0) setCurrImg(currImg=> currImg-1)
@@ -86,8 +88,7 @@ function ImageCarousel(){
             ))}
         </ul>
      </div>
-     <h1 className="text-[2rem] font-bold text-center pt-5">This is the Homepage</h1>
      </>
     )
 }
-export {HomePage}
+export {HomePage,ImageCarousel}

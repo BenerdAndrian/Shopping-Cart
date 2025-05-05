@@ -3,6 +3,10 @@ import { useOutletContext } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { LoadingPage } from "./utils";
 import { Notification } from "./utils";
+import { ImageCarousel } from "./HomePage";
+import productImg1 from '../assets/img/productImg1.jpg'
+import productImg2 from '../assets/img/productImg2.jpg'
+import productImg3 from '../assets/img/productImg3.jpg'
 // create custom hook to fetch dataList with 30 items(limit=30)
 const useFetchAPI=()=>{
     const [dataList,setDataList]=useState({})
@@ -52,6 +56,7 @@ const useFetchFixedAPI=(id)=>{
 }
 //ProductPage component
 function ProductPage(){
+    const productImgs=[productImg3,productImg1,productImg2]
     const [notify,setNotify]=useState(false)
     const {addToCart}=useOutletContext();
     const {dataList,error,loading}=useFetchAPI();
@@ -92,7 +97,8 @@ function ProductPage(){
     //render jsx
     return(
         <>
-           {notify && <Notification role='cart' closeNotification={toClose}/>}
+        <ImageCarousel images={productImgs}/>
+        <Notification notify={notify} role='cart' closeNotification={toClose}/>
            <h1 className="text-[2rem] font-bold text-center pt-5">This is the product page</h1>
            <div className="p-3">
            <input onChange={findProduct} type="text" placeholder="Search for items" className="text-[1.3rem] p-1 w-full border" />
@@ -116,7 +122,7 @@ function ProductPage(){
                 </li>
             ))
             :
-            <p>There is no data.</p>
+            <p className="h-100">There is no data.</p>
         }
            </ul>
            </div>

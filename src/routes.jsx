@@ -6,7 +6,6 @@ import { DetailProduct } from "./components/detailProduct"
 import App from "./App"
 const routes = [
     {path:'/',element:<App/>,children:[
-        {index:true,element:<HomePage/>},
         {path:'products',element:<ProductPage/>},
         {path:'cart',element:<CartPage/>},
         {path:'products/:id',element:<DetailProduct/>}
