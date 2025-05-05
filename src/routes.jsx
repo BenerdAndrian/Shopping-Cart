@@ -5,10 +5,16 @@ import { ProductPage } from "./components/ProductPage"
 import { DetailProduct } from "./components/detailProduct"
 import App from "./App"
 const routes = [
-    {path:'/',element:<App/>,children:[
-        {path:'products',element:<ProductPage/>},
-        {path:'cart',element:<CartPage/>},
-        {path:'products/:id',element:<DetailProduct/>}
-    ]},
-]
+    {
+      path: '/',
+      element: <App />,
+      children: [
+        { index: true, element:<ProductPage/> },  // redirect default to /products
+        { path: 'products', element: <ProductPage /> },
+        { path: 'products/:id', element: <DetailProduct /> },
+        { path: 'cart', element: <CartPage /> },
+      ]
+    },
+  ];
+  
 export {routes}
